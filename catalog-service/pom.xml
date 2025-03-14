@@ -137,7 +137,7 @@
 					<image>
 <!--					The plugin can create an OCI image from a jar or war file using Cloud Native Buildpacks (CNB)-->
 						<name>${dockerImageName}</name>
-						<builder>dashaun/builder:tiny</builder>
+<!--						<builder>dashaun/builder:tiny</builder>-->
 					</image>
 				</configuration>
 				<executions>
