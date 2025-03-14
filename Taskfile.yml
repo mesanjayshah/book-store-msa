@@ -3,11 +3,11 @@ version: '3'
 vars:
   GOOS: "{{default OS .GOOS}}"
   MVNW: '{{if eq .GOOS "windows"}}mvnw.cmd{{else}}./mvnw{{end}}'
-  DC_DIR: "deployment/docker-compose"
+  DC_DIR: "./deployment/docker-compose"
   INFRA_DC_FILE: "{{.DC_DIR}}/infra.yml"
   APPS_DC_FILE: "{{.DC_DIR}}/apps.yml"
   MONITORING_DC_FILE: "{{.DC_DIR}}/monitoring.yml"
-  SLEEP_CMD: '{{if eq .GOOS "windows"}}timeout{{else}}sleep{{end}}'
+  SLEEP_CMD: '{{if eq .GOOS "windows"}}timeout /T 2 /NOBREAK{{else}}sleep 2{{end}}'
 
 tasks:
   default:
@@ -24,11 +24,11 @@ tasks:
 
   build:
     cmds:
-      - "{{.MVNW}} -pl catalog-service spring-boot:build-image -DskipTests"
-#      - "{{.MVNW}} -pl order-service spring-boot:build-image -DskipTests"
-#      - "{{.MVNW}} -pl notification-service spring-boot:build-image -DskipTests"
-#      - "{{.MVNW}} -pl api-gateway spring-boot:build-image -DskipTests"
-#      - "{{.MVNW}} -pl bookstore-webapp spring-boot:build-image -DskipTests"
+      - "@{{.MVNW}} -pl catalog-service spring-boot:build-image -DskipTests"
+      - "@{{.MVNW}} -pl order-service spring-boot:build-image -DskipTests"
+#      - "@{{.MVNW}} -pl notification-service spring-boot:build-image -DskipTests"
+#      - "@{{.MVNW}} -pl api-gateway spring-boot:build-image -DskipTests"
+#      - "@{{.MVNW}} -pl bookstore-webapp spring-boot:build-image -DskipTests"
 
   start_infra:
     cmds:
@@ -42,7 +42,7 @@ tasks:
   restart_infra:
     cmds:
       - task: stop_infra
-      - task: sleep
+      - "{{.SLEEP_CMD}}"
       - task: start_infra
 
 #  start_monitoring:
